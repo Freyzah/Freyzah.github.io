@@ -572,6 +572,20 @@ strong { color: var(--accent); font-weight: 600; }
   padding: 24px;
 }
 
+.project-card__badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent-secondary);
+  background: rgba(167, 139, 250, 0.1);
+  border: 1px solid rgba(167, 139, 250, 0.15);
+  padding: 4px 10px;
+  border-radius: 100px;
+  margin-bottom: 12px;
+}
+
 .project-card__title {
   font-family: var(--font-display);
   font-size: 1.15rem;
@@ -822,10 +836,7 @@ strong { color: var(--accent); font-weight: 600; }
 .reveal[data-delay="2"] { transition-delay: 0.2s; }
 .reveal[data-delay="3"] { transition-delay: 0.3s; }
 .reveal[data-delay="4"] { transition-delay: 0.4s; }
-
-.reveal.visible[data-tilt] {
-  transition: none;
-}
+.reveal[data-delay="5"] { transition-delay: 0.5s; }
 
 /* ============================================
    NOISE TEXTURE OVERLAY

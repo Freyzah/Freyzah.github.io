@@ -79,6 +79,10 @@ sections.forEach(section => sectionObserver.observe(section));
 // ============================================
 
 document.querySelectorAll('[data-tilt]').forEach(card => {
+  card.addEventListener('mouseenter', () => {
+    card.style.transition = 'border-color 0.3s, box-shadow 0.4s';
+  });
+
   card.addEventListener('mousemove', (e) => {
     const rect = card.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
@@ -87,6 +91,7 @@ document.querySelectorAll('[data-tilt]').forEach(card => {
   });
 
   card.addEventListener('mouseleave', () => {
+    card.style.transition = '';
     card.style.transform = '';
   });
 });
