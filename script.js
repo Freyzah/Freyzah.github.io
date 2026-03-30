@@ -42,6 +42,12 @@ const revealObserver = new IntersectionObserver(
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('visible');
+        const delay = entry.target.dataset.delay;
+        if (delay) {
+          setTimeout(() => {
+            entry.target.style.transitionDelay = '0s';
+          }, parseFloat(delay) * 100 + 700);
+        }
         revealObserver.unobserve(entry.target);
       }
     });
