@@ -823,6 +823,10 @@ strong { color: var(--accent); font-weight: 600; }
 .reveal[data-delay="3"] { transition-delay: 0.3s; }
 .reveal[data-delay="4"] { transition-delay: 0.4s; }
 
+.reveal.visible[data-tilt] {
+  transition: none;
+}
+
 /* ============================================
    NOISE TEXTURE OVERLAY
    ============================================ */
