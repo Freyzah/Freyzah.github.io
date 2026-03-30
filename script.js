@@ -79,11 +79,20 @@ sections.forEach(section => sectionObserver.observe(section));
 // ============================================
 
 document.querySelectorAll('[data-tilt]').forEach(card => {
+  let entered = false;
+
   card.addEventListener('mouseenter', () => {
-    card.style.transition = 'border-color 0.3s, box-shadow 0.4s';
+    entered = false;
+    card.style.transition = 'transform 0.25s ease, border-color 0.3s, box-shadow 0.4s';
   });
 
   card.addEventListener('mousemove', (e) => {
+    if (!entered) {
+      entered = true;
+      setTimeout(() => {
+        card.style.transition = 'border-color 0.3s, box-shadow 0.4s';
+      }, 250);
+    }
     const rect = card.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
@@ -91,6 +100,7 @@ document.querySelectorAll('[data-tilt]').forEach(card => {
   });
 
   card.addEventListener('mouseleave', () => {
+    entered = false;
     card.style.transition = '';
     card.style.transform = '';
   });
