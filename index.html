@@ -318,29 +318,35 @@
       <div class="modal__section">
         <h4 class="modal__section-title">Contexte</h4>
         <p class="modal__text">
-          Kiosk est une application de borne de commande en libre-service destinée au secteur de la restauration. Développée chez CashMag, elle permet aux clients de passer commande de manière autonome sur des bornes tactiles (terminaux Sunmi et iMin). L'application gère l'ensemble du parcours : consultation du catalogue, composition de menus, paiement multi-moyens et impression du ticket.
+          CashMag est un éditeur de logiciels spécialisé dans les solutions d'encaissement pour la restauration et le commerce. Kiosk est leur application de borne de commande en libre-service : elle tourne sur des terminaux tactiles Android (Sunmi et iMin) et permet aux clients de restaurants de passer commande de manière totalement autonome.
+        </p>
+        <p class="modal__text">
+          L'application couvre l'intégralité du parcours client : navigation dans le catalogue produit, composition de menus et formules, personnalisation des articles (options, suppléments), gestion de la fidélité client (scan NFC/QR), paiement via 8+ moyens différents (carte bancaire, sans contact, Twint, espèces, wallets…) et impression du ticket sur imprimante thermique. Le projet représente plus de 220 fichiers Dart et s'interface avec le back-office CashMag via une API REST.
         </p>
       </div>
 
       <div class="modal__section">
         <h4 class="modal__section-title">Mon rôle</h4>
         <p class="modal__text">
-          Développeur Flutter en alternance, j'ai travaillé sur l'ensemble de l'application : ajout de nouvelles fonctionnalités, intégration de moyens de paiement (Twint), gestion du matériel (LED d'état, imprimantes thermiques) et amélioration de l'expérience utilisateur (produits favoris, badges, nouveaux types de cartes produit).
+          En tant que développeur Flutter en alternance sur deux ans, j'ai travaillé en autonomie sur l'ensemble de l'application : conception et développement de nouvelles fonctionnalités, intégration de moyens de paiement, gestion du matériel embarqué et amélioration continue de l'expérience utilisateur. J'ai contribué à la fois sur le front-end (widgets, navigation, animations) et sur la couche métier (modèles, logique de commande, communication API). Chaque fonctionnalité que j'ai développée a été déployée en production sur les bornes de vrais restaurants clients.
         </p>
       </div>
 
       <div class="modal__section">
         <h4 class="modal__section-title">Fonctionnalités clés</h4>
         <ul class="modal__list">
-          <li>Intégration du paiement Twint via EPTPayBridge</li>
-          <li>Système de Top Sales (famille virtuelle, badge, configuration)</li>
-          <li>Produits favoris et badge "Nouveau"</li>
-          <li>Nouveau type de carte produit (Large avec description)</li>
-          <li>Créneaux de désactivation de la borne avec scheduler</li>
-          <li>Écran de veille vidéo avec créneaux horaires d'images</li>
-          <li>Gestion des réductions par groupe client et famille</li>
-          <li>Gestion des contremarques et commandes gratuites</li>
-          <li>LED d'état réagissant au cycle de vie de l'application</li>
+          <li>Intégration du paiement Twint via le bridge EPTPayBridge — nouveau moyen de paiement mobile suisse, avec gestion du protocole de communication vers le terminal de paiement et suivi du statut de la transaction</li>
+          <li>Système de Top Sales — création d'une famille virtuelle qui agrège automatiquement les produits les plus vendus sur une période configurable, avec badge "Top" sur les cartes produit et récupération des données de vente via l'API</li>
+          <li>Réductions par groupe client et famille de produits — implémentation d'un mixin Discountable pour le calcul des prix, gestion des remises en cascade (groupe client + famille), affichage des badges de réduction et impression détaillée sur le ticket</li>
+          <li>Produits favoris et badge "Nouveau" — marquage de produits comme favoris pour un accès rapide, et système de badges visuels personnalisables (couleurs configurables via Kiosk Tune)</li>
+          <li>Nouveau type de carte produit (Large avec description) — variante d'affichage pour mettre en avant les produits avec une image grande et une description détaillée, idéal pour les plats du jour</li>
+          <li>Créneaux de désactivation de la borne — système de planification horaire (TimeSlot) permettant de désactiver automatiquement la borne à certaines heures (ex. pendant la fermeture), avec un scheduler qui vérifie l'état en continu</li>
+          <li>Écran de veille vidéo avec images planifiées — lecteur vidéo pour l'écran d'inactivité, avec possibilité de programmer des images différentes selon des créneaux horaires (TimedImage), et fallback sur l'image par défaut quand aucun créneau n'est actif</li>
+          <li>Gestion des contremarques — impression automatique de contremarques (tickets de préparation) envoyées en cuisine, avec logique de fusion des lignes quand les quantités d'options diffèrent</li>
+          <li>Gestion des commandes gratuites — affichage des produits à prix zéro, détection automatique des commandes entièrement gratuites (fidélité), et adaptation du flux de paiement pour ces cas spéciaux</li>
+          <li>LED d'état sur le matériel — pilotage de la LED indicatrice du terminal pour refléter l'état de l'application en temps réel (active, en pause, en erreur), via les SDK natifs Sunmi/iMin</li>
+          <li>Gestion de la résolution d'images — redimensionnement automatique des images dépassant 3 Mo ou 1024×1024 pixels, pour optimiser les performances sur le matériel embarqué à mémoire limitée</li>
+          <li>Logger de endpoints — système de journalisation vers des endpoints configurables pour le monitoring, avec gestion des niveaux de log et des appenders personnalisés</li>
         </ul>
       </div>
 
@@ -348,15 +354,21 @@
         <h4 class="modal__focus-title">Focus — Système de bannières publicitaires</h4>
         <p class="modal__focus-subtitle">Problème</p>
         <p class="modal__text">
-          Les restaurateurs souhaitaient mettre en avant certains produits ou rubriques via des bannières visuelles sur l'écran de commande, pour augmenter les ventes de produits spécifiques ou promouvoir des offres.
+          Les restaurateurs souhaitaient un moyen de mettre en avant certains produits ou catégories directement sur l'écran de commande — par exemple pour promouvoir un menu du jour, une offre spéciale ou une nouvelle gamme. Sans ce système, les clients devaient naviguer manuellement dans tout le catalogue pour découvrir les promotions.
         </p>
         <p class="modal__focus-subtitle">Solution</p>
         <p class="modal__text">
-          J'ai développé un système complet de bannières publicitaires intégré à l'écran de commande. Un composant de rotation d'images affiche les bannières en boucle. Chaque bannière peut être liée à un produit spécifique ou à une rubrique entière : au clic, le client est redirigé vers le produit ou la catégorie correspondante. J'ai également ajouté un suivi de la source des commandes pour identifier les ventes générées par les bannières.
+          J'ai conçu et développé un système complet de bannières publicitaires intégré à l'écran de commande. Le composant principal, <strong>AdsBannerWidget</strong> (~300 lignes), affiche un carrousel d'images publicitaires qui tournent automatiquement. L'élément clé est le système de liaison : chaque bannière peut être associée soit à un produit spécifique, soit à une rubrique entière du catalogue. Quand le client touche une bannière, la navigation est conditionnelle — il est redirigé vers la fiche produit ou vers la catégorie correspondante, selon le type de lien configuré.
+        </p>
+        <p class="modal__text">
+          J'ai également ajouté une couche de traçabilité métier : un enum <strong>ItemOrderLineSource</strong> qui enregistre la provenance de chaque article ajouté au panier (navigation classique, bannière pub, suggestion…). Cela permet aux restaurateurs de mesurer l'impact réel de leurs bannières sur les ventes.
+        </p>
+        <p class="modal__text">
+          Côté configuration, j'ai développé en parallèle dans Kiosk Tune une interface dédiée (<strong>AdsImagesTabView</strong>) et un dialogue de liaison (<strong>AdsBannerLinkDialog</strong>) qui permettent d'uploader les images, de définir les liens vers les produits/rubriques et de prévisualiser le rendu.
         </p>
         <p class="modal__focus-subtitle">Intérêt technique</p>
         <p class="modal__text">
-          Cette feature combine affichage dynamique d'images, navigation conditionnelle (produit vs rubrique), gestion d'état avec un style dialog dédié, et traçabilité métier des ventes. Le widget principal (~300 lignes) gère le cycle de vie des images, les interactions utilisateur et la communication avec le reste de l'application.
+          Cette fonctionnalité illustre un développement transversal sur deux applications : la partie affichage et navigation dans Kiosk, et la partie configuration dans Kiosk Tune. Elle combine gestion d'état (BannerDialogStyleState), affichage dynamique d'images avec rotation, navigation conditionnelle selon le type de lien, sérialisation JSON bidirectionnelle pour la persistance de la configuration, et traçabilité analytique via les sources de commande. Le widget gère aussi le cycle de vie des images (chargement, erreurs, cache) et le redimensionnement automatique pour s'adapter aux différentes résolutions d'écran des bornes.
         </p>
       </div>
 
@@ -367,6 +379,8 @@
           <span>Dart</span>
           <span>REST API</span>
           <span>Sunmi / iMin SDK</span>
+          <span>JSON</span>
+          <span>Impression thermique</span>
         </div>
       </div>
     </div>
@@ -383,26 +397,31 @@
       <div class="modal__section">
         <h4 class="modal__section-title">Contexte</h4>
         <p class="modal__text">
-          Kiosk Tune est l'application compagnon de Kiosk, conçue pour configurer les bornes à distance. Elle permet aux gérants de personnaliser l'apparence, les moyens de paiement, les publicités et le comportement de leurs bornes sans intervention physique, via une découverte réseau automatique (mDNS).
+          Kiosk Tune est l'application compagnon de Kiosk, conçue pour résoudre un problème concret : configurer et personnaliser les bornes de commande à distance, sans avoir à se déplacer physiquement devant chaque borne. Dans un restaurant possédant plusieurs bornes, ou pour un prestataire gérant un parc de bornes chez différents clients, pouvoir tout configurer depuis une tablette est essentiel.
+        </p>
+        <p class="modal__text">
+          L'application détecte automatiquement les bornes Kiosk présentes sur le réseau local grâce au protocole mDNS (Multicast DNS), puis établit une connexion pour envoyer la configuration. Elle couvre tous les aspects : apparence visuelle, catalogue, moyens de paiement, publicités, horaires de fonctionnement et sauvegardes.
         </p>
       </div>
 
       <div class="modal__section">
         <h4 class="modal__section-title">Mon rôle</h4>
         <p class="modal__text">
-          Développeur Flutter en alternance, j'ai conçu et implémenté plusieurs fonctionnalités structurantes : le système de backup/restauration, la personnalisation visuelle (thèmes, couleurs, boutons de paiement), la gestion des bannières publicitaires côté configuration, et la planification de créneaux horaires pour les images et la désactivation des bornes.
+          J'ai conçu et implémenté la majorité des fonctionnalités de l'application en autonomie. Contrairement à Kiosk (application mature que j'ai enrichie), Kiosk Tune était en phase de développement actif : j'ai pu concevoir plusieurs modules de zéro, de l'architecture des modèles de données jusqu'à l'interface utilisateur. Cela m'a permis de prendre des décisions d'architecture, de concevoir des API internes propres et de gérer le cycle de vie complet d'une feature (développement, tests sur matériel, déploiement, puis refactoring après retour terrain).
         </p>
       </div>
 
       <div class="modal__section">
         <h4 class="modal__section-title">Fonctionnalités clés</h4>
         <ul class="modal__list">
-          <li>Personnalisation complète du thème (couleurs, boutons de paiement)</li>
-          <li>Configuration des bannières publicitaires avec lien produit/rubrique</li>
-          <li>Planification d'images d'accueil par créneaux horaires</li>
-          <li>Créneaux de désactivation des bornes</li>
-          <li>Configuration du Top Sales et des politiques de suggestion</li>
-          <li>Lecteur vidéo pour l'écran de veille</li>
+          <li>Personnalisation complète du thème — sélection de thèmes prédéfinis (dark, lollipop, wood…), personnalisation fine des couleurs de chaque élément via un color picker que j'ai externalisé en widget réutilisable, et configuration de l'apparence des boutons de paiement</li>
+          <li>Configuration des bannières publicitaires — interface de gestion des images avec onglets (AdsImagesTabView), upload d'images, dialogue de liaison vers un produit ou une rubrique, et gestion du ScrollController par onglet pour éviter les conflits de positions</li>
+          <li>Planification d'images d'accueil par créneaux horaires — modèle TimedImage avec TimeSlot (heure de début/fin), interface d'édition des créneaux, sérialisation JSON et synchronisation vers la borne</li>
+          <li>Créneaux de désactivation des bornes — même système de TimeSlot appliqué à la désactivation automatique, avec un onglet dédié dans la planification</li>
+          <li>Configuration du Top Sales — interface pour activer/désactiver la rubrique Top Sales, configurer le nombre de produits, la période d'analyse, le type de tri et l'image associée, avec gestion du fichier image en local</li>
+          <li>Politique de suggestions et spinner — configuration de l'évaluateur de suggestions (quels produits proposer en complément) avec un widget spinner pour les valeurs numériques</li>
+          <li>Lecteur vidéo pour l'écran de veille — intégration d'un lecteur vidéo configurable pour l'écran d'inactivité de la borne</li>
+          <li>Intégration du paiement Twint — configuration côté Tune du nouveau moyen de paiement, rendu extensible après refactoring pour faciliter l'ajout de futurs moyens de paiement</li>
         </ul>
       </div>
 
@@ -410,15 +429,25 @@
         <h4 class="modal__focus-title">Focus — Système de backup et restauration</h4>
         <p class="modal__focus-subtitle">Problème</p>
         <p class="modal__text">
-          Les bornes Kiosk nécessitent une configuration complexe (thème, moyens de paiement, publicités, créneaux horaires). En cas de panne ou de remplacement de matériel, reconfigurer une borne manuellement était long et source d'erreurs. Il fallait un moyen de sauvegarder et restaurer l'intégralité de la configuration.
+          Chaque borne Kiosk possède une configuration riche et spécifique : thème personnalisé, moyens de paiement activés, bannières publicitaires avec leurs images, créneaux horaires de fonctionnement, politique de suggestions… En cas de panne matérielle, de remplacement d'un terminal ou simplement pour dupliquer la configuration sur une nouvelle borne, reconfigurer manuellement chaque paramètre prenait un temps considérable et était source d'erreurs et d'oublis.
         </p>
         <p class="modal__focus-subtitle">Solution</p>
         <p class="modal__text">
-          J'ai développé un service de backup complet qui archive toute la configuration et les fichiers associés, les envoie sur le serveur via l'API, et permet de les télécharger et restaurer sur n'importe quelle borne. J'ai aussi ajouté un backup automatique à chaque envoi de configuration, et une interface dédiée pour gérer les sauvegardes manuellement.
+          J'ai développé un système de backup/restauration complet en trois couches. Le modèle <strong>BackupDocument</strong> représente une sauvegarde avec ses métadonnées (date, identifiant, préfixe de nommage). Le service <strong>BackupService</strong> orchestre tout le processus : il collecte la configuration courante et tous les fichiers associés (images, thèmes…), les archive ensemble, puis les transmet au serveur via l'API (<strong>FulleAppsApi</strong>). Pour la restauration, le service télécharge l'archive depuis le serveur, extrait les fichiers et reconstruit la configuration complète.
+        </p>
+        <p class="modal__text">
+          J'ai aussi implémenté un <strong>backup automatique</strong> : à chaque envoi de configuration vers une borne, une sauvegarde est créée en arrière-plan. Cette préférence est persistée via <strong>SharedPreferences</strong> pour survivre aux redémarrages de l'application, et chargée au démarrage avant même la création du Repository.
+        </p>
+        <p class="modal__text">
+          L'interface utilisateur est un <strong>BackupMenuDialog</strong> (~260 lignes) accessible depuis l'écran d'accueil, qui permet de créer une sauvegarde manuelle, de lister les sauvegardes existantes sur le serveur, de télécharger et restaurer une configuration, le tout avec un feedback visuel en temps réel (indicateurs de chargement, messages de succès/erreur).
+        </p>
+        <p class="modal__focus-subtitle">Cycle de développement itératif</p>
+        <p class="modal__text">
+          La première version utilisait le package <strong>archive</strong> pour créer des archives compressées. Après déploiement en production et retours terrain, j'ai effectué un refactoring important : remplacement du modèle de dates par DateTime natif, simplification du BackupService et de l'API pour plus de robustesse, meilleure gestion des erreurs de fichiers et de réseau, suppression de la dépendance archive devenue inutile, et modularisation de la logique de chargement/restauration dans le Repository. Ce refactoring illustre un cycle de développement concret : livrer une v1 fonctionnelle, récolter les retours, puis itérer pour améliorer la fiabilité.
         </p>
         <p class="modal__focus-subtitle">Intérêt technique</p>
         <p class="modal__text">
-          Cette feature touche à plusieurs couches : sérialisation de données complexes, gestion de fichiers (archivage, transfert), communication serveur (upload/download via API), persistance locale des préférences, et interface utilisateur avec feedback en temps réel. Le code a été refactoré une fois en production pour améliorer la fiabilité et la gestion d'erreurs — un bon exemple de cycle de développement itératif.
+          Cette fonctionnalité est transversale à toute l'application : elle touche à la sérialisation de données complexes (JSON imbriqué avec fichiers binaires), à la gestion de fichiers (lecture, écriture, archivage), à la communication réseau (upload/download via API REST), à la persistance locale (SharedPreferences), et à l'interface utilisateur (dialogue interactif avec états de chargement). C'est un bon exemple d'une feature qui nécessite de comprendre l'architecture complète de l'application pour fonctionner correctement.
         </p>
       </div>
 
@@ -430,6 +459,7 @@
           <span>mDNS</span>
           <span>REST API</span>
           <span>SharedPreferences</span>
+          <span>JSON</span>
         </div>
       </div>
     </div>
