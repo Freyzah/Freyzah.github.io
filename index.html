@@ -377,13 +377,81 @@
             </div>
           </div>
         </div>
+        <div class="modal__code">
+          <div class="modal__code-header">
+            <span class="modal__code-dot"></span>
+            ads_banner_widget.dart — Modèle de données & sérialisation
+          </div>
+          <pre><span class="kw">enum</span> <span class="type">AdsBannerItemLinkType</span> {
+  none,
+  product(label: <span class="str">'Produit'</span>),
+  rubric(label: <span class="str">'Rubrique'</span>);
+
+  <span class="kw">final</span> <span class="type">String</span> label;
+  <span class="kw">const</span> <span class="fn">AdsBannerItemLinkType</span>({<span class="kw">this</span>.label = <span class="str">''</span>});
+}
+
+<span class="kw">class</span> <span class="type">AdsBannerItem</span> {
+  <span class="type">String</span> imageFileName;
+  <span class="type">AdsBannerItemLinkType</span> linkType;
+  <span class="type">int</span>? linkId;
+
+  <span class="kw">factory</span> <span class="fn">AdsBannerItem.fromJson</span>(<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="kw">dynamic</span>&gt; json) {
+    <span class="kw">return</span> <span class="fn">AdsBannerItem</span>(
+      imageFileName: json[<span class="str">'imageFileName'</span>],
+      linkType: <span class="type">AdsBannerItemLinkType</span>.values
+          .<span class="fn">firstWhere</span>((e) =&gt; e.name == json[<span class="str">'linkType'</span>]),
+      linkId: json[<span class="str">'linkId'</span>],
+    );
+  }
+}</pre>
+        </div>
+
+        <div class="modal__code">
+          <div class="modal__code-header">
+            <span class="modal__code-dot"></span>
+            ads_banner_widget.dart — Navigation conditionnelle au clic
+          </div>
+          <pre><span class="cm">// Quand le client touche une bannière :</span>
+<span class="kw">if</span> (linkedItem.linkType == <span class="type">AdsBannerItemLinkType</span>.product) {
+  <span class="cm">// Lien vers un produit → on le cherche par code</span>
+  <span class="type">Product</span>? product = productsModel.<span class="fn">firstWhere</span>(
+    (p) =&gt; <span class="type">int</span>.<span class="fn">parse</span>(p.code) == linkedItem.linkId);
+  productsToShow.<span class="fn">add</span>(product!);
+
+} <span class="kw">else if</span> (linkedItem.linkType == <span class="type">AdsBannerItemLinkType</span>.rubric) {
+  <span class="cm">// Lien vers une rubrique → on affiche tous ses produits</span>
+  <span class="type">Family</span>? family = familiesModel.<span class="fn">firstWhere</span>(
+    (f) =&gt; <span class="type">int</span>.<span class="fn">parse</span>(f.code) == linkedItem.linkId);
+  productsToShow.<span class="fn">addAll</span>(productsModel.entries
+    .<span class="fn">where</span>((p) =&gt; p.familyCode == family?.code));
+}</pre>
+        </div>
+
+        <div class="modal__code">
+          <div class="modal__code-header">
+            <span class="modal__code-dot"></span>
+            item_order_line.dart — Traçabilité des ventes par source
+          </div>
+          <pre><span class="kw">enum</span> <span class="type">ItemOrderLineSource</span> {
+  standard(<span class="num">1</span>),
+  productsSuggestion(<span class="num">2</span>),
+  mealsSuggestion(<span class="num">3</span>),
+  endOfOrderSuggestion(<span class="num">4</span>),
+  upgradedMealsSuggestion(<span class="num">5</span>),
+  <span class="accent">adsBanner</span>(<span class="num">6</span>);  <span class="cm">// ← ma contribution</span>
+
+  <span class="kw">final int</span> value;
+  <span class="kw">const</span> <span class="fn">ItemOrderLineSource</span>(<span class="kw">this</span>.value);
+}</pre>
+        </div>
+
         <div class="modal__keywords">
-          <span>AdsBannerWidget (~300 lignes)</span>
+          <span>~300 lignes</span>
           <span>Rotation d'images</span>
           <span>Navigation conditionnelle</span>
           <span>Gestion d'état</span>
           <span>Config via Kiosk Tune</span>
-          <span>Sérialisation JSON</span>
         </div>
       </div>
 
@@ -462,13 +530,70 @@
             </div>
           </div>
         </div>
+        <div class="modal__code">
+          <div class="modal__code-header">
+            <span class="modal__code-dot"></span>
+            backup_document.dart — Modèle de sauvegarde
+          </div>
+          <pre><span class="kw">class</span> <span class="type">BackupDocument</span> {
+  <span class="kw">static const</span> <span class="type">String</span> baseName = <span class="str">'backup'</span>;
+
+  <span class="kw">final int</span> id;
+  <span class="kw">final</span> <span class="type">String</span> name;
+  <span class="kw">final</span> <span class="type">String</span> path;
+  <span class="kw">final</span> <span class="type">DateTime</span> date;
+
+  <span class="kw">factory</span> <span class="fn">BackupDocument.fromJson</span>(<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="kw">dynamic</span>&gt; json) {
+    <span class="type">DateTime</span>? docDate = <span class="type">DateTime</span>.<span class="fn">tryParse</span>(json[<span class="str">'date'</span>] ?? <span class="str">''</span>);
+    <span class="kw">if</span> (docDate == <span class="kw">null</span>) <span class="kw">throw</span> <span class="fn">Exception</span>(<span class="str">'Invalid date'</span>);
+    <span class="kw">return</span> <span class="fn">BackupDocument</span>(
+      id: json[<span class="str">'id'</span>], name: json[<span class="str">'name'</span>],
+      path: json[<span class="str">'path'</span>], date: docDate,
+    );
+  }
+
+  <span class="type">String</span> <span class="kw">get</span> prefix =&gt; name.<span class="fn">substring</span>(<span class="num">0</span>, name.<span class="fn">lastIndexOf</span>(<span class="str">'_'</span>));
+  <span class="kw">static</span> <span class="type">String</span> <span class="fn">buildPrefix</span>(<span class="type">int</span> id) =&gt; <span class="str">'${baseName}_$id'</span>;
+}</pre>
+        </div>
+
+        <div class="modal__code">
+          <div class="modal__code-header">
+            <span class="modal__code-dot"></span>
+            backup_service.dart — Création & restauration d'un backup
+          </div>
+          <pre><span class="kw">Future</span>&lt;<span class="type">File</span>?&gt; <span class="fn">createBackup</span>(<span class="type">List</span>&lt;<span class="type">File</span>&gt; files) <span class="kw">async</span> {
+  <span class="type">List</span>&lt;<span class="type">File</span>&gt; toBackup = files.<span class="fn">where</span>((f) =&gt; f.<span class="fn">existsSync</span>()).<span class="fn">toList</span>();
+  <span class="kw">if</span> (toBackup.isEmpty) <span class="kw">return null</span>;
+
+  <span class="type">String</span> ts = <span class="type">DateTime</span>.<span class="fn">now</span>().<span class="fn">toIso8601String</span>()
+      .<span class="fn">replaceAll</span>(<span class="str">':'</span>, <span class="str">'-'</span>);
+  <span class="kw">var</span> encoder = <span class="type">ZipFileEncoder</span>();
+  encoder.<span class="fn">create</span>(<span class="str">'kiosk_tune_backup_$ts.zip'</span>);
+  <span class="kw">for</span> (<span class="kw">var</span> file <span class="kw">in</span> toBackup) encoder.<span class="fn">addFileSync</span>(file);
+  encoder.<span class="fn">close</span>();
+  <span class="kw">return</span> <span class="type">File</span>(backupFilePath);
+}
+
+<span class="kw">Future</span>&lt;<span class="type">bool</span>&gt; <span class="fn">restoreBackup</span>(<span class="type">File</span> backupZip) <span class="kw">async</span> {
+  <span class="kw">final</span> bytes = <span class="kw">await</span> backupZip.<span class="fn">readAsBytes</span>();
+  <span class="kw">final</span> archive = <span class="type">ZipDecoder</span>().<span class="fn">decodeBytes</span>(bytes);
+  <span class="kw">for</span> (<span class="kw">final</span> file <span class="kw">in</span> archive) {
+    <span class="kw">if</span> (!file.isFile) <span class="kw">continue</span>;
+    <span class="type">File</span> target = <span class="type">File</span>(<span class="str">'${localStorageDir.path}/${file.name}'</span>);
+    <span class="kw">await</span> target.parent.<span class="fn">create</span>(recursive: <span class="kw">true</span>);
+    <span class="kw">await</span> target.<span class="fn">writeAsBytes</span>(file.content);
+  }
+  <span class="kw">return true</span>;
+}</pre>
+        </div>
+
         <div class="modal__keywords">
-          <span>BackupDocument</span>
-          <span>BackupService</span>
-          <span>API REST (upload/download)</span>
+          <span>3 couches</span>
+          <span>API REST</span>
           <span>SharedPreferences</span>
           <span>Refactoring post-prod</span>
-          <span>Gestion d'erreurs réseau</span>
+          <span>Gestion d'erreurs</span>
         </div>
       </div>
 

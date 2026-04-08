@@ -71,7 +71,7 @@ focus. Le jury voit la liste complète sur l'écran.]
 
 
 ========================================================
-  KIOSK — FOCUS BANNIERES PUB (~2 min)
+  KIOSK — FOCUS BANNIERES PUB (~2.5 min)
 ========================================================
 
 [Montre la section Focus avec les 3 étapes]
@@ -88,29 +88,36 @@ Mais sur la borne, les clients naviguent dans le catalogue classique
 et ne tombent pas forcément dessus. Il n'y avait aucun moyen de
 pousser un produit visuellement.
 
---- Etape 2 : Solution ---
+--- Etape 2 : Solution + CODE ---
 
-J'ai développé un widget complet, le AdsBannerWidget — environ 300
-lignes — qui affiche un carrousel de bannières en rotation
-automatique sur l'écran de commande. L'élément clé c'est le système
-de liaison : chaque bannière peut être liée soit à un produit
-spécifique, soit à une rubrique entière. Quand le client touche la
-bannière, la navigation est conditionnelle — il est redirigé vers le
-bon endroit selon le type de lien.
+[Montre le 1er bloc de code — le modèle AdsBannerItem]
 
-Côté technique, le widget gère le cycle de vie des images, le cache,
-les erreurs de chargement, et le redimensionnement pour s'adapter
-aux différentes résolutions d'écran des bornes. Et côté config, j'ai
-aussi développé dans Kiosk Tune l'interface qui permet aux gérants
-d'uploader leurs images et de les lier aux produits.
+Pour la solution, j'ai créé un modèle de données — que vous pouvez
+voir ici. On a un enum AdsBannerItemLinkType avec trois valeurs :
+none, product, et rubric. Ça permet de définir le type de lien de
+chaque bannière. Ensuite la classe AdsBannerItem qui contient
+l'image, le type de lien, et l'identifiant du produit ou de la
+rubrique ciblée. Le fromJson permet de désérialiser la config qui
+vient de Kiosk Tune.
 
---- Etape 3 : Résultat ---
+[Montre le 2e bloc de code — la navigation conditionnelle]
 
-Et le plus intéressant c'est la traçabilité : j'ai ajouté un enum
-ItemOrderLineSource qui enregistre la provenance de chaque article
-ajouté au panier. Du coup le restaurateur peut savoir si une vente
-vient de la navigation classique, d'une bannière pub, ou d'une
-suggestion. Il peut mesurer l'impact réel de ses bannières."
+Et voici la logique au clic sur une bannière. C'est une navigation
+conditionnelle : si le lien est vers un produit, on cherche le
+produit par son code et on l'affiche directement. Si c'est vers une
+rubrique, on récupère toute la famille de produits correspondante.
+C'est le coeur du système — un seul widget qui gère deux
+comportements différents selon la configuration.
+
+--- Etape 3 : Résultat + CODE ---
+
+[Montre le 3e bloc de code — l'enum ItemOrderLineSource]
+
+Et pour mesurer l'impact, j'ai ajouté une valeur 'adsBanner' à
+l'enum ItemOrderLineSource. Chaque article ajouté au panier garde
+trace de sa provenance : navigation classique, suggestion de produit,
+suggestion de menu, ou bannière pub. Le restaurateur peut donc savoir
+exactement combien de ventes viennent de ses bannières."
 
 [Ferme la modal Kiosk, clique sur Kiosk Tune]
 
@@ -169,36 +176,41 @@ paiement, bannières pub, horaires... Quand une borne tombe en panne
 ou qu'on remplace le matériel, il faut tout reconfigurer à la main.
 C'est long, c'est source d'erreurs, et ça frustre les clients.
 
---- Etape 2 : Solution ---
+--- Etape 2 : Solution + CODE ---
 
-J'ai conçu le système en trois couches. D'abord un modèle
-BackupDocument qui représente une sauvegarde avec ses métadonnées.
-Ensuite un BackupService qui orchestre tout : il collecte la config
-courante et tous les fichiers associés — images, thèmes... — il les
-archive et les envoie sur le serveur via l'API. Pour restaurer,
-c'est l'inverse : téléchargement depuis le serveur, extraction et
-reconstruction de la config complète.
+[Montre le 1er bloc de code — BackupDocument]
 
-J'ai aussi ajouté un backup automatique : à chaque fois que le
-gérant envoie une config vers une borne, un backup est créé en
-arrière-plan. La préférence est persistée avec SharedPreferences
-pour qu'elle survive aux redémarrages.
+Voici le modèle BackupDocument. C'est simple et propre : un id, un
+nom, un chemin et une date. Le factory fromJson gère la
+désérialisation depuis l'API — avec une validation de la date, si
+elle est invalide on lève une exception. Et le getter 'prefix'
+permet de retrouver les backups liés à un point de vente spécifique
+via buildPrefix.
 
-L'interface c'est un BackupMenuDialog accessible depuis l'accueil,
-avec création manuelle, liste des sauvegardes serveur, et
-restauration en un clic.
+[Montre le 2e bloc de code — createBackup & restoreBackup]
+
+Et voici les deux méthodes clés du BackupService. createBackup prend
+une liste de fichiers, filtre ceux qui existent, crée une archive
+ZIP avec un timestamp dans le nom, et y ajoute chaque fichier.
+restoreBackup fait l'inverse : il lit le ZIP, parcourt chaque
+fichier de l'archive, crée les dossiers parents si nécessaire, et
+écrit le contenu. C'est symétrique — ce qui rentre peut ressortir à
+l'identique.
+
+Entre les deux, il y a aussi sendBackupToServer et
+downloadBackupFromServer qui gèrent la communication avec l'API REST
+— upload et download des archives.
 
 --- Etape 3 : Résultat + cycle itératif ---
 
 Ce qui est intéressant avec cette feature, c'est qu'elle illustre un
-vrai cycle de développement itératif. La v1 utilisait le package
-'archive' pour la compression. Après le déploiement et les retours
-terrain, j'ai fait un refactoring important : j'ai simplifié le
-service, amélioré la gestion d'erreurs réseau et fichiers, remplacé
-le modèle de dates, et finalement supprimé la dépendance 'archive'
-qui n'était plus nécessaire. C'est un bon exemple de : on livre une
-première version qui marche, on écoute les retours, et on itère pour
-améliorer la fiabilité."
+vrai cycle de développement itératif. La v1 que vous voyez ici
+utilisait le package 'archive' pour la compression. Après le
+déploiement en production et les retours terrain, j'ai fait un
+refactoring important : simplification du service, meilleure gestion
+des erreurs réseau, et suppression de la dépendance 'archive'
+devenue inutile. C'est un bon exemple de : on livre une v1 qui
+marche, on écoute les retours, et on itère pour améliorer."
 
 
 ========================================================
