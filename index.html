@@ -152,7 +152,7 @@
       </h2>
       <div class="projects__grid">
 
-        <article class="project-card reveal" data-tilt>
+        <article class="project-card reveal" data-tilt data-modal="modal-gotuhc">
           <div class="project-card__image">
             <div class="project-card__image-placeholder">
               <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
@@ -177,7 +177,7 @@
           </div>
         </article>
 
-        <article class="project-card reveal" data-delay="1" data-tilt>
+        <article class="project-card reveal" data-delay="1" data-tilt data-modal="modal-trellolink">
           <div class="project-card__image">
             <div class="project-card__image-placeholder">
               <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
@@ -605,6 +605,161 @@
           <span>mDNS</span>
           <span>REST API</span>
           <span>SharedPreferences</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-gotuhc">
+    <div class="modal">
+      <button class="modal__close" aria-label="Fermer">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <h3 class="modal__title">GoT UHC Plugin</h3>
+      <p class="modal__context">Plugin Minecraft Spigot — mode UHC thématique Game of Thrones</p>
+
+      <div class="modal__stats">
+        <div class="modal__stat">
+          <span class="modal__stat-value">92</span>
+          <span class="modal__stat-label">fichiers Java</span>
+        </div>
+        <div class="modal__stat">
+          <span class="modal__stat-value">17</span>
+          <span class="modal__stat-label">rôles jouables</span>
+        </div>
+        <div class="modal__stat">
+          <span class="modal__stat-value">7</span>
+          <span class="modal__stat-label">camps</span>
+        </div>
+      </div>
+
+      <div class="modal__section">
+        <h4 class="modal__section-title">Principe</h4>
+        <ul class="modal__list">
+          <li>Chaque joueur reçoit un rôle secret (Jon Snow, Arya, Night King...)</li>
+          <li>Chaque rôle a des capacités uniques (commandes, listeners Bukkit)</li>
+          <li>Les camps s'affrontent — les rôles peuvent changer de camp en jeu</li>
+          <li>Architecture : interface Role + AbstractRole + implémentations par personnage</li>
+        </ul>
+      </div>
+
+      <div class="modal__code">
+        <div class="modal__code-header">
+          <span class="modal__code-dot"></span>
+          Camp.java — Système de camps et rôles
+        </div>
+        <pre><span class="kw">public enum</span> <span class="type">Camp</span> {
+  STARK(  <span class="type">RobbStarkRole</span>.<span class="kw">class</span>, <span class="type">BenjenStarkRole</span>.<span class="kw">class</span>,
+          <span class="type">JonSnowRole</span>.<span class="kw">class</span>, <span class="type">EddardStarkRole</span>.<span class="kw">class</span>,
+          <span class="type">AryaStarkRole</span>.<span class="kw">class</span>),
+  LANNISTER(<span class="type">JaimeLannisterRole</span>.<span class="kw">class</span>, <span class="type">CerseiLannisterRole</span>.<span class="kw">class</span>,
+            <span class="type">GregorCleganeRole</span>.<span class="kw">class</span>, <span class="type">JoffreyBaratheonRole</span>.<span class="kw">class</span>),
+  TARGARYEN(<span class="type">DaenerysRole</span>.<span class="kw">class</span>),
+  NIGHTKING(<span class="type">NightKingRole</span>.<span class="kw">class</span>),
+  NEUTRAL(  <span class="type">MelisandreRole</span>.<span class="kw">class</span>);
+
+  <span class="kw">private final</span> <span class="type">List</span>&lt;<span class="type">Class</span>&lt;? <span class="kw">extends</span> <span class="type">AbstractRole</span>&gt;&gt; rolesClass;
+
+  <span class="kw">public void</span> <span class="fn">changeRoleCamp</span>(<span class="type">Class</span>&lt;?&gt; role, <span class="type">Camp</span> newCamp) {
+    rolesClass.<span class="fn">remove</span>(role);
+    newCamp.rolesClass.<span class="fn">add</span>(role);  <span class="cm">// Changement d'alliance en jeu</span>
+  }
+}</pre>
+      </div>
+
+      <div class="modal__code">
+        <div class="modal__code-header">
+          <span class="modal__code-dot"></span>
+          Role.java — Interface de rôle
+        </div>
+        <pre><span class="kw">public interface</span> <span class="type">Role</span> {
+  <span class="type">String</span>   <span class="fn">getName</span>();
+  <span class="kw">void</span>     <span class="fn">giveRole</span>(<span class="type">Player</span> player);     <span class="cm">// Items + effets passifs</span>
+  <span class="kw">void</span>     <span class="fn">onStart</span>(<span class="type">UHCGoTPlugin</span> plugin); <span class="cm">// Logique au démarrage</span>
+  <span class="type">Player</span>   <span class="fn">getPlayer</span>();
+  <span class="type">RoleInfo</span> <span class="fn">getRoleInfo</span>();
+}</pre>
+      </div>
+
+      <div class="modal__section">
+        <h4 class="modal__section-title">Stack</h4>
+        <div class="modal__tags">
+          <span>Java</span>
+          <span>Spigot API</span>
+          <span>Maven</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-trellolink">
+    <div class="modal">
+      <button class="modal__close" aria-label="Fermer">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <h3 class="modal__title">TrelloLink — Bot Discord</h3>
+      <p class="modal__context">Synchronisation automatique Trello → Discord toutes les 5 minutes</p>
+
+      <div class="modal__stats">
+        <div class="modal__stat">
+          <span class="modal__stat-value">Auto</span>
+          <span class="modal__stat-label">sync toutes les 5 min</span>
+        </div>
+        <div class="modal__stat">
+          <span class="modal__stat-value">2 API</span>
+          <span class="modal__stat-label">Trello + Discord</span>
+        </div>
+      </div>
+
+      <div class="modal__section">
+        <h4 class="modal__section-title">Principe</h4>
+        <ul class="modal__list">
+          <li>Lit les listes et cartes d'un tableau Trello via l'API REST</li>
+          <li>Crée/met à jour les catégories et channels Discord correspondants</li>
+          <li>Synchronise les descriptions des cartes dans des embeds Discord</li>
+          <li>Identifie chaque élément par un ID court pour détecter les renommages</li>
+        </ul>
+      </div>
+
+      <div class="modal__code">
+        <div class="modal__code-header">
+          <span class="modal__code-dot"></span>
+          index.js — Logique de synchronisation (extrait)
+        </div>
+        <pre><span class="kw">async function</span> <span class="fn">syncTrelloToDiscord</span>() {
+  <span class="kw">const</span> lists = <span class="kw">await</span> <span class="fn">getTrelloLists</span>();
+
+  <span class="kw">for</span> (<span class="kw">const</span> list <span class="kw">of</span> lists) {
+    <span class="kw">const</span> listId = list.id.<span class="fn">substring</span>(<span class="num">20</span>, <span class="num">24</span>);
+    <span class="kw">const</span> categoryName = <span class="str">`${list.name}-${listId}`</span>;
+
+    <span class="cm">// Cherche une catégorie existante par ID court</span>
+    <span class="kw">let</span> category = guild.channels.cache
+      .<span class="fn">find</span>(c =&gt; c.name.<span class="fn">endsWith</span>(listId));
+
+    <span class="kw">if</span> (!category) {
+      category = <span class="kw">await</span> guild.channels.<span class="fn">create</span>(categoryName);
+    } <span class="kw">else if</span> (nameChanged) {
+      <span class="kw">await</span> category.<span class="fn">setName</span>(categoryName); <span class="cm">// Renommage</span>
+    }
+
+    <span class="cm">// Idem pour chaque carte → channel Discord</span>
+    <span class="kw">const</span> cards = <span class="kw">await</span> <span class="fn">getTrelloCards</span>(list.id);
+    <span class="cm">// ...</span>
+  }
+}
+
+<span class="cm">// Sync automatique toutes les 5 minutes</span>
+<span class="fn">setInterval</span>(syncTrelloToDiscord, <span class="num">300000</span>);</pre>
+      </div>
+
+      <div class="modal__section">
+        <h4 class="modal__section-title">Stack</h4>
+        <div class="modal__tags">
+          <span>Node.js</span>
+          <span>discord.js</span>
+          <span>Trello API</span>
+          <span>Axios</span>
         </div>
       </div>
     </div>
