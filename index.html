@@ -202,7 +202,7 @@
           </div>
         </article>
 
-        <article class="project-card reveal" data-delay="2" data-tilt>
+        <article class="project-card reveal" data-delay="2" data-tilt data-modal="modal-kiosk">
           <div class="project-card__image">
             <div class="project-card__image-placeholder project-card__image-placeholder--pro">
               <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
@@ -222,7 +222,7 @@
           </div>
         </article>
 
-        <article class="project-card reveal" data-delay="3" data-tilt>
+        <article class="project-card reveal" data-delay="3" data-tilt data-modal="modal-kiosktune">
           <div class="project-card__image">
             <div class="project-card__image-placeholder project-card__image-placeholder--pro">
               <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M12.22 2h-.44a2 2 0 00-2 2v.18a2 2 0 01-1 1.73l-.43.25a2 2 0 01-2 0l-.15-.08a2 2 0 00-2.73.73l-.22.38a2 2 0 00.73 2.73l.15.1a2 2 0 011 1.72v.51a2 2 0 01-1 1.74l-.15.09a2 2 0 00-.73 2.73l.22.38a2 2 0 002.73.73l.15-.08a2 2 0 012 0l.43.25a2 2 0 011 1.73V20a2 2 0 002 2h.44a2 2 0 002-2v-.18a2 2 0 011-1.73l.43-.25a2 2 0 012 0l.15.08a2 2 0 002.73-.73l.22-.39a2 2 0 00-.73-2.73l-.15-.08a2 2 0 01-1-1.74v-.5a2 2 0 011-1.74l.15-.09a2 2 0 00.73-2.73l-.22-.38a2 2 0 00-2.73-.73l-.15.08a2 2 0 01-2 0l-.43-.25a2 2 0 01-1-1.73V4a2 2 0 00-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -305,6 +305,135 @@
   <footer class="footer">
     <p>Conçu & développé par <strong>Florian</strong> — 2026</p>
   </footer>
+
+  <!-- Project Modals -->
+  <div class="modal-overlay" id="modal-kiosk">
+    <div class="modal">
+      <button class="modal__close" aria-label="Fermer">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="modal__badge">Alternance — CashMag</div>
+      <h3 class="modal__title">Kiosk</h3>
+
+      <div class="modal__section">
+        <h4 class="modal__section-title">Contexte</h4>
+        <p class="modal__text">
+          Kiosk est une application de borne de commande en libre-service destinée au secteur de la restauration. Développée chez CashMag, elle permet aux clients de passer commande de manière autonome sur des bornes tactiles (terminaux Sunmi et iMin). L'application gère l'ensemble du parcours : consultation du catalogue, composition de menus, paiement multi-moyens et impression du ticket.
+        </p>
+      </div>
+
+      <div class="modal__section">
+        <h4 class="modal__section-title">Mon rôle</h4>
+        <p class="modal__text">
+          Développeur Flutter en alternance, j'ai travaillé sur l'ensemble de l'application : ajout de nouvelles fonctionnalités, intégration de moyens de paiement (Twint), gestion du matériel (LED d'état, imprimantes thermiques) et amélioration de l'expérience utilisateur (produits favoris, badges, nouveaux types de cartes produit).
+        </p>
+      </div>
+
+      <div class="modal__section">
+        <h4 class="modal__section-title">Fonctionnalités clés</h4>
+        <ul class="modal__list">
+          <li>Intégration du paiement Twint via EPTPayBridge</li>
+          <li>Système de Top Sales (famille virtuelle, badge, configuration)</li>
+          <li>Produits favoris et badge "Nouveau"</li>
+          <li>Nouveau type de carte produit (Large avec description)</li>
+          <li>Créneaux de désactivation de la borne avec scheduler</li>
+          <li>Écran de veille vidéo avec créneaux horaires d'images</li>
+          <li>Gestion des réductions par groupe client et famille</li>
+          <li>Gestion des contremarques et commandes gratuites</li>
+          <li>LED d'état réagissant au cycle de vie de l'application</li>
+        </ul>
+      </div>
+
+      <div class="modal__focus">
+        <h4 class="modal__focus-title">Focus — Système de bannières publicitaires</h4>
+        <p class="modal__focus-subtitle">Problème</p>
+        <p class="modal__text">
+          Les restaurateurs souhaitaient mettre en avant certains produits ou rubriques via des bannières visuelles sur l'écran de commande, pour augmenter les ventes de produits spécifiques ou promouvoir des offres.
+        </p>
+        <p class="modal__focus-subtitle">Solution</p>
+        <p class="modal__text">
+          J'ai développé un système complet de bannières publicitaires intégré à l'écran de commande. Un composant de rotation d'images affiche les bannières en boucle. Chaque bannière peut être liée à un produit spécifique ou à une rubrique entière : au clic, le client est redirigé vers le produit ou la catégorie correspondante. J'ai également ajouté un suivi de la source des commandes pour identifier les ventes générées par les bannières.
+        </p>
+        <p class="modal__focus-subtitle">Intérêt technique</p>
+        <p class="modal__text">
+          Cette feature combine affichage dynamique d'images, navigation conditionnelle (produit vs rubrique), gestion d'état avec un style dialog dédié, et traçabilité métier des ventes. Le widget principal (~300 lignes) gère le cycle de vie des images, les interactions utilisateur et la communication avec le reste de l'application.
+        </p>
+      </div>
+
+      <div class="modal__section">
+        <h4 class="modal__section-title">Stack technique</h4>
+        <div class="modal__tags">
+          <span>Flutter</span>
+          <span>Dart</span>
+          <span>REST API</span>
+          <span>Sunmi / iMin SDK</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-kiosktune">
+    <div class="modal">
+      <button class="modal__close" aria-label="Fermer">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="modal__badge">Alternance — CashMag</div>
+      <h3 class="modal__title">Kiosk Tune</h3>
+
+      <div class="modal__section">
+        <h4 class="modal__section-title">Contexte</h4>
+        <p class="modal__text">
+          Kiosk Tune est l'application compagnon de Kiosk, conçue pour configurer les bornes à distance. Elle permet aux gérants de personnaliser l'apparence, les moyens de paiement, les publicités et le comportement de leurs bornes sans intervention physique, via une découverte réseau automatique (mDNS).
+        </p>
+      </div>
+
+      <div class="modal__section">
+        <h4 class="modal__section-title">Mon rôle</h4>
+        <p class="modal__text">
+          Développeur Flutter en alternance, j'ai conçu et implémenté plusieurs fonctionnalités structurantes : le système de backup/restauration, la personnalisation visuelle (thèmes, couleurs, boutons de paiement), la gestion des bannières publicitaires côté configuration, et la planification de créneaux horaires pour les images et la désactivation des bornes.
+        </p>
+      </div>
+
+      <div class="modal__section">
+        <h4 class="modal__section-title">Fonctionnalités clés</h4>
+        <ul class="modal__list">
+          <li>Personnalisation complète du thème (couleurs, boutons de paiement)</li>
+          <li>Configuration des bannières publicitaires avec lien produit/rubrique</li>
+          <li>Planification d'images d'accueil par créneaux horaires</li>
+          <li>Créneaux de désactivation des bornes</li>
+          <li>Configuration du Top Sales et des politiques de suggestion</li>
+          <li>Lecteur vidéo pour l'écran de veille</li>
+        </ul>
+      </div>
+
+      <div class="modal__focus">
+        <h4 class="modal__focus-title">Focus — Système de backup et restauration</h4>
+        <p class="modal__focus-subtitle">Problème</p>
+        <p class="modal__text">
+          Les bornes Kiosk nécessitent une configuration complexe (thème, moyens de paiement, publicités, créneaux horaires). En cas de panne ou de remplacement de matériel, reconfigurer une borne manuellement était long et source d'erreurs. Il fallait un moyen de sauvegarder et restaurer l'intégralité de la configuration.
+        </p>
+        <p class="modal__focus-subtitle">Solution</p>
+        <p class="modal__text">
+          J'ai développé un service de backup complet qui archive toute la configuration et les fichiers associés, les envoie sur le serveur via l'API, et permet de les télécharger et restaurer sur n'importe quelle borne. J'ai aussi ajouté un backup automatique à chaque envoi de configuration, et une interface dédiée pour gérer les sauvegardes manuellement.
+        </p>
+        <p class="modal__focus-subtitle">Intérêt technique</p>
+        <p class="modal__text">
+          Cette feature touche à plusieurs couches : sérialisation de données complexes, gestion de fichiers (archivage, transfert), communication serveur (upload/download via API), persistance locale des préférences, et interface utilisateur avec feedback en temps réel. Le code a été refactoré une fois en production pour améliorer la fiabilité et la gestion d'erreurs — un bon exemple de cycle de développement itératif.
+        </p>
+      </div>
+
+      <div class="modal__section">
+        <h4 class="modal__section-title">Stack technique</h4>
+        <div class="modal__tags">
+          <span>Flutter</span>
+          <span>Dart</span>
+          <span>mDNS</span>
+          <span>REST API</span>
+          <span>SharedPreferences</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
