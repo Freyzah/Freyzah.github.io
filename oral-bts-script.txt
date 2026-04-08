@@ -1,0 +1,248 @@
+========================================================
+  SCRIPT ORAL BTS — PROJETS EN ENTREPRISE (10 min)
+========================================================
+
+Timing indicatif :
+- Intro + présentation entreprise : ~1 min
+- Kiosk (contexte + contributions + focus bannières) : ~4 min
+- Kiosk Tune (contexte + contributions + focus backup) : ~4 min
+- Conclusion / ouverture : ~1 min
+
+
+========================================================
+  INTRO (~1 min)
+========================================================
+
+[Pas besoin de cliquer, tu es sur la page principale du portfolio]
+
+"Bonjour, je vais vous présenter les deux projets principaux sur
+lesquels j'ai travaillé pendant mes deux années d'alternance chez
+CashMag.
+
+CashMag est un éditeur de logiciels spécialisé dans les solutions
+d'encaissement pour la restauration et le commerce. Mon travail
+portait sur deux applications Flutter complémentaires : Kiosk, une
+borne de commande en libre-service, et Kiosk Tune, son application
+de configuration à distance."
+
+[Clique sur la carte Kiosk pour ouvrir la modal]
+
+
+========================================================
+  KIOSK — CONTEXTE (~1 min)
+========================================================
+
+[La modal s'ouvre avec les chiffres clés visibles]
+
+"Kiosk c'est l'application qui tourne sur les bornes tactiles dans
+les restaurants — des terminaux Android de marques Sunmi et iMin. Le
+client se met devant, il navigue dans le catalogue, compose son
+menu, paie, et récupère son ticket.
+
+C'est un projet conséquent : plus de 220 fichiers Dart, 8 moyens de
+paiement différents intégrés, et toutes les fonctionnalités que j'ai
+développées ont été déployées en production dans de vrais restaurants
+clients. J'ai travaillé dessus pendant mes deux ans d'alternance, en
+autonomie, autant sur la partie interface que sur la logique métier
+et la communication avec l'API REST du back-office CashMag."
+
+
+========================================================
+  KIOSK — MES CONTRIBUTIONS (~1 min)
+========================================================
+
+[Montre la liste des contributions sur la modal]
+
+"Parmi mes contributions principales, j'ai intégré un nouveau moyen
+de paiement — Twint, qui est un wallet mobile suisse — via un bridge
+appelé EPTPayBridge. Il fallait gérer le protocole de communication
+avec le terminal de paiement et suivre le statut de la transaction
+en temps réel.
+
+J'ai aussi développé le système de Top Sales — c'est une famille
+virtuelle qui affiche automatiquement les produits les plus vendus
+avec un badge 'Top'. Et puis la gestion des réductions par groupe
+client, les produits favoris, un nouveau type de carte produit plus
+grande, les créneaux de désactivation automatique de la borne, la
+LED d'état du matériel..."
+
+[Tu n'as pas besoin de tout détailler — cite-en 4 ou 5 et passe au
+focus. Le jury voit la liste complète sur l'écran.]
+
+
+========================================================
+  KIOSK — FOCUS BANNIERES PUB (~2 min)
+========================================================
+
+[Montre la section Focus avec les 3 étapes]
+
+"La feature sur laquelle je vais m'attarder, c'est le système de
+bannières publicitaires. Je vais vous expliquer le problème, ma
+solution, et le résultat.
+
+--- Etape 1 : Problème ---
+
+Le problème c'est que les restaurateurs voulaient mettre en avant
+certains produits — un menu du jour, une promo, une nouvelle gamme.
+Mais sur la borne, les clients naviguent dans le catalogue classique
+et ne tombent pas forcément dessus. Il n'y avait aucun moyen de
+pousser un produit visuellement.
+
+--- Etape 2 : Solution ---
+
+J'ai développé un widget complet, le AdsBannerWidget — environ 300
+lignes — qui affiche un carrousel de bannières en rotation
+automatique sur l'écran de commande. L'élément clé c'est le système
+de liaison : chaque bannière peut être liée soit à un produit
+spécifique, soit à une rubrique entière. Quand le client touche la
+bannière, la navigation est conditionnelle — il est redirigé vers le
+bon endroit selon le type de lien.
+
+Côté technique, le widget gère le cycle de vie des images, le cache,
+les erreurs de chargement, et le redimensionnement pour s'adapter
+aux différentes résolutions d'écran des bornes. Et côté config, j'ai
+aussi développé dans Kiosk Tune l'interface qui permet aux gérants
+d'uploader leurs images et de les lier aux produits.
+
+--- Etape 3 : Résultat ---
+
+Et le plus intéressant c'est la traçabilité : j'ai ajouté un enum
+ItemOrderLineSource qui enregistre la provenance de chaque article
+ajouté au panier. Du coup le restaurateur peut savoir si une vente
+vient de la navigation classique, d'une bannière pub, ou d'une
+suggestion. Il peut mesurer l'impact réel de ses bannières."
+
+[Ferme la modal Kiosk, clique sur Kiosk Tune]
+
+
+========================================================
+  KIOSK TUNE — CONTEXTE (~1 min)
+========================================================
+
+[La modal Kiosk Tune s'ouvre]
+
+"Kiosk Tune c'est l'application compagnon. Elle sert à configurer
+les bornes Kiosk à distance depuis une tablette, sans avoir à se
+déplacer devant chaque borne. C'est particulièrement utile quand un
+restaurateur a plusieurs bornes, ou quand un prestataire gère un
+parc de bornes chez différents clients.
+
+L'application découvre automatiquement les bornes sur le réseau
+local grâce au protocole mDNS — Multicast DNS — puis se connecte
+pour envoyer la configuration.
+
+Contrairement à Kiosk qui était une application mature que j'ai
+enrichie, Kiosk Tune était en développement actif. J'ai conçu
+plusieurs modules de zéro, des modèles de données jusqu'à
+l'interface. Ça m'a permis de prendre de vraies décisions
+d'architecture."
+
+
+========================================================
+  KIOSK TUNE — MES CONTRIBUTIONS (~30 sec)
+========================================================
+
+[Montre la liste]
+
+"J'ai développé la personnalisation des thèmes avec un color picker
+que j'ai externalisé en widget réutilisable, la configuration des
+bannières pub côté config, la planification d'images par créneaux
+horaires, la config du Top Sales, et pas mal d'autres choses que
+vous pouvez voir dans la liste."
+
+[Passe vite, le jury voit la liste]
+
+
+========================================================
+  KIOSK TUNE — FOCUS BACKUP (~2 min)
+========================================================
+
+[Montre la section Focus avec les 3 étapes]
+
+"Le focus que j'ai choisi pour Kiosk Tune c'est le système de
+backup et restauration.
+
+--- Etape 1 : Problème ---
+
+Chaque borne a une configuration très spécifique : thème, moyens de
+paiement, bannières pub, horaires... Quand une borne tombe en panne
+ou qu'on remplace le matériel, il faut tout reconfigurer à la main.
+C'est long, c'est source d'erreurs, et ça frustre les clients.
+
+--- Etape 2 : Solution ---
+
+J'ai conçu le système en trois couches. D'abord un modèle
+BackupDocument qui représente une sauvegarde avec ses métadonnées.
+Ensuite un BackupService qui orchestre tout : il collecte la config
+courante et tous les fichiers associés — images, thèmes... — il les
+archive et les envoie sur le serveur via l'API. Pour restaurer,
+c'est l'inverse : téléchargement depuis le serveur, extraction et
+reconstruction de la config complète.
+
+J'ai aussi ajouté un backup automatique : à chaque fois que le
+gérant envoie une config vers une borne, un backup est créé en
+arrière-plan. La préférence est persistée avec SharedPreferences
+pour qu'elle survive aux redémarrages.
+
+L'interface c'est un BackupMenuDialog accessible depuis l'accueil,
+avec création manuelle, liste des sauvegardes serveur, et
+restauration en un clic.
+
+--- Etape 3 : Résultat + cycle itératif ---
+
+Ce qui est intéressant avec cette feature, c'est qu'elle illustre un
+vrai cycle de développement itératif. La v1 utilisait le package
+'archive' pour la compression. Après le déploiement et les retours
+terrain, j'ai fait un refactoring important : j'ai simplifié le
+service, amélioré la gestion d'erreurs réseau et fichiers, remplacé
+le modèle de dates, et finalement supprimé la dépendance 'archive'
+qui n'était plus nécessaire. C'est un bon exemple de : on livre une
+première version qui marche, on écoute les retours, et on itère pour
+améliorer la fiabilité."
+
+
+========================================================
+  CONCLUSION (~30 sec)
+========================================================
+
+[Ferme la modal]
+
+"Pour résumer, ces deux années d'alternance m'ont permis de
+travailler sur des applications Flutter en production, avec du
+matériel embarqué, des API REST, et des vrais utilisateurs. J'ai pu
+toucher à beaucoup d'aspects : de l'intégration de moyens de
+paiement à la gestion d'images, en passant par l'architecture de
+services comme le backup. Et surtout, j'ai appris à faire évoluer
+du code en production avec un vrai cycle de développement itératif.
+
+Merci, je suis disponible pour vos questions."
+
+
+========================================================
+  CONSEILS POUR L'ORAL
+========================================================
+
+- Ne lis JAMAIS le texte de la modal. Le jury le voit. Toi tu
+  racontes, tu expliques, tu montres du doigt.
+
+- Les chiffres clés (220+, 8+, 2 ans) sont tes accroches visuelles.
+  Pointe-les quand tu en parles.
+
+- Pour le focus, suis les 3 étapes visuellement (1, 2, 3) — ça
+  structure ton discours et le jury suit sur l'écran.
+
+- Si tu sens que tu vas vite : développe un peu plus sur les
+  contributions (explique 1-2 features de plus en détail).
+
+- Si tu sens que tu prends du retard : raccourcis la partie
+  "Mes contributions" (juste cite 2-3 noms) et garde le temps
+  pour les focus.
+
+- Le jury va probablement poser des questions sur les choix
+  techniques. Prépare-toi à expliquer :
+  * Pourquoi Flutter ? (cross-platform, même code pour Sunmi et iMin)
+  * Comment marche mDNS ? (découverte réseau automatique, pas besoin
+    de connaître l'IP)
+  * Pourquoi refactorer le backup ? (retours terrain, fiabilité,
+    suppression de dépendances inutiles)
+  * Comment fonctionne le bridge de paiement EPTPayBridge ?
